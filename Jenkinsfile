@@ -12,8 +12,23 @@ pipeline {
         }
         stage('Checkingout git repo') {
              steps {
-              git branch: main, url:
+                git branch: main, url'https://github.com/582Bamfo/test-cicd.git'
              }
+        }
+        stage('INITIALISATION') {
+              steps{
+                sh 'terraform init'
+              }
+        }
+        stage('PLANNING') {
+          steps{
+            sh 'terraform paln'
+          }
+        }
+        stage('DEPLOYING TO STAGE') {
+          steps{
+            sh 'terraform apply -auto-approve'
+          }
         }
     }
 }
