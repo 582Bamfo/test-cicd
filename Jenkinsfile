@@ -39,7 +39,7 @@ pipeline {
       }
     }
 
-    stage("deploy") {
+    stage("deployment") {
       steps{
         sh 'terraform apply -auto-approve'
       }
