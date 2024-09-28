@@ -22,7 +22,7 @@ pipeline {
         }
         stage('PLANNING') {
           steps{
-            sh 'terraform paln'
+            sh 'terraform plan'
           }
         }
         stage('DEPLOYING TO STAGE') {
