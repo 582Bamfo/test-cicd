@@ -37,14 +37,10 @@ pipeline {
                 sh '''
                 tfsec --level all .
                 '''
-            }
-        }
-            }
+                    }
+                   }
+                  }
           
          }
-        stage('DEPLOYING TO STAGE') {
-          steps{
-            sh 'terraform apply -auto-approve'
-          }
-        }
+        
     }
