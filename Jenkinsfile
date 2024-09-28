@@ -25,21 +25,19 @@ pipeline {
             sh 'terraform plan'
           }
         }
-        stage(‘tfsec’){
-            agent {
-              docker {
-                 image ‘tfsec/tfsec-ci’
-              }
-              }
-          steps {
-            script {
-                // Run tfsec command inside the Docker container
-                sh '''
-                tfsec --level all .
-                '''
-                    }
-                   }
-                  }
+        stage('tfsec') {
+           agent {
+             docker { 
+               image 'tfsec/tfsec-ci:v0.57.1' 
+               reuseNode true
+             }
+           }
+            steps {
+             sh '''
+              tfsec . --no-color
+            '''
+      }
+    }
           
          }
         
