@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Checkingout git repo') {
              steps {
-                git branch: 'main', url'https://github.com/582Bamfo/test-cicd.git'
+                git branch: 'main', url:'https://github.com/582Bamfo/test-cicd.git'
              }
         }
         stage('INITIALISATION') {
