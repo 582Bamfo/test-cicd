@@ -25,27 +25,17 @@ pipeline {
             sh 'terraform plan'
           }
         }
-        stage('Checkov') {
-          agent {
-                docker {
-                    image 'bridgecrew/checkov:latest'  // The Docker image for Checkov
-                                     // Run as root user (optional)
-                }
+        stage(‘tfsec’){
+            agent {
+              docker {
+                 image ‘tfsec/tfsec-ci:v0.57.1’
+              }
+              }
+               steps {
+                sh ‘’’ tfsec — no-color ‘’’
+              }
             }
           
-             steps {
-                 script {
-                    
-                         try {
-                             sh 'checkov -d . --use-enforcement-rules -o cli -o junitxml --output-file-path console,results.xml --repo-id example/terragoat --branch main'
-                             junit skipPublishingChecks: true, testResults: 'results.xml'
-                         } catch (err) {
-                             junit skipPublishingChecks: true, testResults: 'results.xml'
-                             throw err
-                         }
-                     }
-                 }
-             }
          }
         stage('DEPLOYING TO STAGE') {
           steps{
