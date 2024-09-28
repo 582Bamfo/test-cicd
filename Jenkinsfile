@@ -25,12 +25,22 @@ pipeline {
             sh 'terraform plan'
           }
         }
-        stage('checkov') {
-          steps{
-            sh 'pipenv run pip install checkov'
-            sh 'pipenv run checkov -d . --use-enforcement-rules -o cli -o junitxml --output-file-path console,results.xml --repo-id example/terragoat --branch main'
-          }
-        }
+        stage('Checkov') {
+             steps {
+                 script {
+                     docker.image('bridgecrew/checkov:latest').inside("--entrypoint=''") {
+                         unstash 'terragoat'
+                         try {
+                             sh 'checkov -d . --use-enforcement-rules -o cli -o junitxml --output-file-path console,results.xml --repo-id example/terragoat --branch main'
+                             junit skipPublishingChecks: true, testResults: 'results.xml'
+                         } catch (err) {
+                             junit skipPublishingChecks: true, testResults: 'results.xml'
+                             throw err
+                         }
+                     }
+                 }
+             }
+         }
         stage('DEPLOYING TO STAGE') {
           steps{
             sh 'terraform apply -auto-approve'
