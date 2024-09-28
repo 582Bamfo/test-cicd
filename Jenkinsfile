@@ -32,7 +32,7 @@ pipeline {
               }
               }
                steps {
-                sh ‘’’ tfsec — no-color ‘’’
+                sh ‘tfsec — no-color‘
               }
             }
           
