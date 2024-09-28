@@ -26,10 +26,16 @@ pipeline {
           }
         }
         stage('Checkov') {
+          agent {
+                docker {
+                    image 'bridgecrew/checkov:latest'  // The Docker image for Checkov
+                                     // Run as root user (optional)
+                }
+            }
+          
              steps {
                  script {
-                     docker.image('bridgecrew/checkov:latest').inside("--entrypoint=''") {
-                         unstash 'terragoat'
+                    
                          try {
                              sh 'checkov -d . --use-enforcement-rules -o cli -o junitxml --output-file-path console,results.xml --repo-id example/terragoat --branch main'
                              junit skipPublishingChecks: true, testResults: 'results.xml'
