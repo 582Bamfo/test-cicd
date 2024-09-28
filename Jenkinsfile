@@ -31,9 +31,14 @@ pipeline {
                  image ‘tfsec/tfsec-ci’
               }
               }
-               steps {
-                sh ‘tfsec — no-color‘
-              }
+          steps {
+            script {
+                // Run tfsec command inside the Docker container
+                sh '''
+                tfsec --level all .
+                '''
+            }
+        }
             }
           
          }
